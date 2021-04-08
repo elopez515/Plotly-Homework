@@ -49,8 +49,15 @@
       console.log("trace1 :", chart_data)
       // Plot the chart to a div tag with id "plot"
       Plotly.newPlot("bar", chart_data);
-  
+
+      var demographics = d3.select("#sample-metadata");
+
+      var meta_data = data.metadata.filter(row => row.id == 940);
+      console.log("metadata :", meta_data)
       
+      Object.entries(meta_data[0]).forEach(([key, value]) => {
+        demographics.append("h5").text(`${key}: ${value}`)});
+
   });
   
 
