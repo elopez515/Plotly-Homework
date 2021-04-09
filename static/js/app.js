@@ -6,10 +6,9 @@
       // Create variables that will filter/map through our data set and pull the necessary info for our graphs
       var id_filter = data.samples.map(row => row.id);
       var sample_data = data.samples.filter(row => row.id == 940)
-      var otu_ids = sample_data.map(row => row.otu_ids.slice(0,10))
-      var otu_labels = sample_data.map(row => row.otu_labels.slice(0,10));
-      var sample_values = sample_data.map(row => row.sample_values.slice(0,10));
-
+      var otu_ids = sample_data.map(row => row.otu_ids)
+      var otu_labels = sample_data.map(row => row.otu_labels);
+      var sample_values = sample_data.map(row => row.sample_values);
 
       // Console log in order to view our variables 
       console.log("id_filter: ", id_filter);
@@ -31,17 +30,30 @@
     
       });
 
-      var x = [];
-      var y = [];
-    
-      //  Create the Traces
+      //  Create the Traces for horizontal bar graph
       var trace1 = {
-        x: sample_values[0].reverse(),
-        y: otu_ids[0].reverse(),
-        text: otu_labels[0].reverse(),
+        x: sample_values[0].slice(0,10).reverse(),
+        y: otu_ids[0].slice(0,10).reverse(),
+        text: otu_labels[0].slice(0,10).reverse(),
         type: "bar",
-        orientation: 'h'
+        orientation: 'h',
+        marker:{
+          width: 1
+        }
+      };  
+
+      // Create the Traces for bubble chart
+      var trace2 = { 
+        y: sample_values[0],
+        x: otu_ids[0],
+        text: otu_labels[0],
+        mode: 'markers',
+        marker: {
+          color: otu_ids[0],
+          size: sample_values[0]
+        }
       };
+ 
     
 
       // Create the data array for the plot
@@ -49,6 +61,9 @@
       console.log("trace1 :", chart_data)
       // Plot the chart to a div tag with id "plot"
       Plotly.newPlot("bar", chart_data);
+
+      var bubble_chart = [trace2];
+      Plotly.newPlot('bubble', bubble_chart);
 
       var demographics = d3.select("#sample-metadata");
 
@@ -63,11 +78,13 @@
 
 
   
-  var dropdown = d3.select("#selDataset").on("change", optionChanged);
-  
+  var dropdown = d3.select("#selDataset").on("change", optionChanged, demographic_info);
+  // var id_selected = this.value
+
   function optionChanged() {
+    
     console.log(this.value);
-    var id = this.value
+    var id_selected = this.value
     
     d3.json("samples.json").then((data) => {
 
@@ -75,46 +92,98 @@
   
         // Create variables that will filter/map through our data set and pull the necessary info for our graphs
         var id_filter = data.samples.map(row => row.id);
-        var sample_data = data.samples.filter(row => row.id == id)
-        var otu_ids = sample_data.map(row => row.otu_ids.slice(0,10))
-        var otu_labels = sample_data.map(row => row.otu_labels.slice(0,10));
-        var sample_values = sample_data.map(row => row.sample_values.slice(0,10));
-    // });
+        var sample_data = data.samples.filter(row => row.id == id_selected)
+        var otu_ids = sample_data.map(row => row.otu_ids)
+        var otu_labels = sample_data.map(row => row.otu_labels);
+        var sample_values = sample_data.map(row => row.sample_values);
+    
         // Initialize x and y arrays 
         var x = [];
         var y = [];
       
         //  Create the Traces
-        var trace2 = {
-          x: sample_values[0].reverse(),
-          y: otu_ids[0].reverse(),
-          text: otu_labels[0].reverse(),
+        var trace3 = {
+          x: sample_values[0].slice(0,10).reverse(),
+          y: otu_ids[0].slice(0,10).reverse(),
+          text: otu_labels[0].slice(0,10).reverse(),
           type: "bar",
-          orientation: 'h'
+          orientation: 'h',
+          marker:{
+            width: 2
+          }
+        };
+
+        // Create the Traces for bubble chart
+        var trace4 = { 
+          y: sample_values[0],
+          x: otu_ids[0],
+          text: otu_labels[0],
+          mode: 'markers',
+          marker: {
+            color: otu_ids[0],
+            size: sample_values[0]
+          }
         };
       
-  
         // Create the data array for the plot
-        var chart_data = [trace2];
-        console.log("trace2 :", chart_data)
+        var chart_data = [trace3];
+        console.log("trace3 :", chart_data)
         // Plot the chart to a div tag with id "plot"
         Plotly.newPlot("bar", chart_data);
+
+        var bubble_chart = [trace4];
+        Plotly.newPlot('bubble', bubble_chart);
       });
+      
+      // function demographic_info() {
+      //   console.log(this.value);
+      //   var demographics_id = this.value
+    
+      //   // console.log(demographics_id);
+      //   var demographics = d3.select("#sample-metadata");
+
+      //   var meta_data = data.metadata.filter(row => row.id == demographics_id);
+      //   console.log("metadata :", meta_data)
+        
+      //   Object.entries(meta_data[0]).forEach(([key, value]) => {
+      //     demographics.append("h5").text(`${key}: ${value}`)});
+
+      //   d3.json("samples.json").then((data) => {
+    
+        // var meta_data = data.metadata.map(row => row);
+        // console.log("metadata :", meta_data[0])
+    
+        // });
+    //  };
   };
   
-  var demographics = d3.select("#sample-metadata").on("change", demographic_info);
+  // var dropdown = d3.select("#selDataset").on("change", optionChanged);
+
+  // var demographics = d3.select("#selDataset").on("change", demographic_info);
   
-  function demographic_info() {
-    console.log(this.value);
-    var demographics_id = this.value
+  // --------------------- demographics info ---------------------
+ 
+//   function demographic_info() {
+    
+//     var dropdown = d3.select("#selDataset").on("change")
+//     console.log(this.value);
+//     var demographics_id = this.value
 
-    d3.json("samples.json").then((data) => {
+//     d3.json("samples.json").then((data) => {
 
-    // var meta_data = data.metadata.map(row => row);
-    // console.log("metadata :", meta_data[0])
+//         // console.log(demographics_id);
+//         var demographics = d3.select("#sample-metadata");
 
-    });
- };
+//         var meta_data = data.metadata.filter(row => row.id == 943);
+//         console.log("metadata :", meta_data)
+        
+//         Object.entries(meta_data[0]).forEach(([key, value]) => {
+//           demographics.append("h5").text(`${key}: ${value}`)});
+
+//     });
+//  };
+ 
+ // --------------------- demographics info ---------------------
   
   // var demographics = d3.select("#sample-metadata");
   // // var demographic_info = demographics.property("value");
