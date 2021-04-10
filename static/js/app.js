@@ -36,10 +36,10 @@ function init() {
         y: otu_ids[0].slice(0,10).reverse(),
         text: otu_labels[0].slice(0,10).reverse(),
         type: "bar",
-        orientation: 'h',
-        marker:{
-          width: 1
-        }
+        orientation: 'h'
+        // marker:{
+        //   width: 1
+        // }
       };  
 
       // Create the Traces for bubble chart
@@ -49,13 +49,12 @@ function init() {
         text: otu_labels[0],
         mode: 'markers',
         marker: {
-          color: otu_ids[0],
+          color: otu_ids[0], 
+          colorscale: "Earth",
           size: sample_values[0]
         }
       };
  
-    
-
       // Create the data array for the plot
       var bar_chart = [trace1];
       console.log("trace1 :", bar_chart)
@@ -66,6 +65,8 @@ function init() {
       Plotly.newPlot('bubble', bubble_chart);
 
       var demographics = d3.select("#sample-metadata");
+
+      demographics.html("");
 
       var meta_data = data.metadata.filter(row => row.id == 940);
       console.log("metadata :", meta_data)
@@ -89,17 +90,16 @@ function init() {
 
       console.log("data: ", data);
 
-      // d3.json("samples.json").then((data) => {
-
-        // console.log(demographics_id);
-        var demographics = d3.select("#sample-metadata");
-
+        var demographics = d3.select("#sample-metadata")
+        
+        demographics.html("");
 
         var meta_data = data.metadata.filter(row => row.id == id_selected);
         console.log("metadata :", meta_data)
       
         Object.entries(meta_data[0]).forEach(([key, value]) => {
           demographics.append("h5").text(`${key}: ${value}`)});
+
 
     // });
   
@@ -134,7 +134,8 @@ function init() {
           mode: 'markers',
           marker: {
             color: otu_ids[0],
-            size: sample_values[0]
+            colorscale: "Earth",
+            size: sample_values[0] 
           }
         };
       
