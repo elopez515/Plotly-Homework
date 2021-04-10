@@ -33,7 +33,7 @@ function init() {
       //  Create the Traces for horizontal bar graph
       var trace1 = {
         x: sample_values[0].slice(0,10).reverse(),
-        y: otu_ids[0].slice(0,10).reverse(),
+        y: otu_ids[0].slice(0,10).map(otuID => `OTU ${otuID}`).reverse(),
         text: otu_labels[0].slice(0,10).reverse(),
         type: "bar",
         orientation: 'h'
@@ -117,7 +117,7 @@ function init() {
         //  Create the Traces
         var trace3 = {
           x: sample_values[0].slice(0,10).reverse(),
-          y: otu_ids[0].slice(0,10).reverse(),
+          y: otu_ids[0].slice(0,10).map(otuID => `OTU ${otuID}`).reverse(),
           text: otu_labels[0].slice(0,10).reverse(),
           type: "bar",
           orientation: 'h',
