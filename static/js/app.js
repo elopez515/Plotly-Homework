@@ -1,4 +1,4 @@
-function init() {
+// function init() {
 
   d3.json("samples.json").then((data) => {
 
@@ -30,58 +30,64 @@ function init() {
         .text(id);
       });
 
-      //  Create the Traces for horizontal bar graph
-      var trace1 = {
-        x: sample_values[0].slice(0,10).reverse(),
-        y: otu_ids[0].slice(0,10).map(otuID => `OTU ${otuID}`).reverse(),
-        text: otu_labels[0].slice(0,10).reverse(),
-        type: "bar",
-        orientation: 'h'
-      };  
+      // //  Create the Traces for horizontal bar graph
+      // var trace1 = {
+      //   x: sample_values[0].slice(0,10).reverse(),
+      //   y: otu_ids[0].slice(0,10).map(otuID => `OTU ${otuID}`).reverse(),
+      //   text: otu_labels[0].slice(0,10).reverse(),
+      //   type: "bar",
+      //   orientation: 'h'
+      // };  
 
-      // Create the Traces for bubble chart
-      var trace2 = { 
-        y: sample_values[0],
-        x: otu_ids[0],
-        text: otu_labels[0],
-        mode: 'markers',
-        marker: {
-          color: otu_ids[0], 
-          colorscale: "Earth",
-          size: sample_values[0]
-        }
-      };
+      // // Create the Traces for bubble chart
+      // var trace2 = { 
+      //   y: sample_values[0],
+      //   x: otu_ids[0],
+      //   text: otu_labels[0],
+      //   mode: 'markers',
+      //   marker: {
+      //     color: otu_ids[0], 
+      //     colorscale: "Earth",
+      //     size: sample_values[0]
+      //   }
+      // };
  
-      // Create the data array for the plot
-      var bar_chart = [trace1];
-      console.log("trace1 :", bar_chart)
-      // Plot the chart to a div tag with id "plot"
-      Plotly.newPlot("bar", bar_chart);
+      // // Create the data array for the plot
+      // var bar_chart = [trace1];
+      // console.log("trace1 :", bar_chart)
+      // // Plot the chart to a div tag with id "plot"
+      // Plotly.newPlot("bar", bar_chart);
 
-      var bubble_chart = [trace2];
-      Plotly.newPlot('bubble', bubble_chart);
+      // var bubble_chart = [trace2];
+      // Plotly.newPlot('bubble', bubble_chart);
 
-      // Create a variable that will select the html tag for our menu
-      var demographics = d3.select("#sample-metadata");
+      // // Create a variable that will select the html tag for our menu
+      // var demographics = d3.select("#sample-metadata");
 
-      demographics.html("");
+      // demographics.html("");
 
-      var meta_data = data.metadata.filter(row => row.id == 940);
-      console.log("metadata :", meta_data)
+      // var meta_data = data.metadata.filter(row => row.id == 940);
+      // console.log("metadata :", meta_data)
       
-      Object.entries(meta_data[0]).forEach(([key, value]) => {
-        demographics.append("h5").text(`${key}: ${value}`)});
-
+      // Object.entries(meta_data[0]).forEach(([key, value]) => {
+      //   demographics.append("h5").text(`${key}: ${value}`)});
+      optionChanged(id_filter[0])
   });
-}
+// }
 
   var dropdown = d3.select("#selDataset").on("change", optionChanged);
 
-  function optionChanged() {
+  function optionChanged(id_filter) {
   
+    if (id_filter == 940) {
+      var id_selected = 940
+    }
+    
+    else{
     console.log(this.value);
     var id_selected = this.value
-    
+    }
+
     d3.json("samples.json").then((data) => {
 
       console.log("data: ", data);
@@ -138,4 +144,4 @@ function init() {
       
   };
   
-  init(); 
+  // init(); 
