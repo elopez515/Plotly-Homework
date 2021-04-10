@@ -1,4 +1,5 @@
 function init() {
+
   d3.json("samples.json").then((data) => {
 
     console.log("data: ", data);
@@ -27,7 +28,6 @@ function init() {
         .append("option")
         .property("value", id)
         .text(id);
-    
       });
 
       //  Create the Traces for horizontal bar graph
@@ -37,9 +37,6 @@ function init() {
         text: otu_labels[0].slice(0,10).reverse(),
         type: "bar",
         orientation: 'h'
-        // marker:{
-        //   width: 1
-        // }
       };  
 
       // Create the Traces for bubble chart
@@ -64,6 +61,7 @@ function init() {
       var bubble_chart = [trace2];
       Plotly.newPlot('bubble', bubble_chart);
 
+      // Create a variable that will select the html tag for our menu
       var demographics = d3.select("#sample-metadata");
 
       demographics.html("");
@@ -76,13 +74,11 @@ function init() {
 
   });
 }
+
   var dropdown = d3.select("#selDataset").on("change", optionChanged);
-  // var id_selected = this.value
 
   function optionChanged() {
   
-    // d3.event.preventDefault();
-
     console.log(this.value);
     var id_selected = this.value
     
@@ -99,9 +95,6 @@ function init() {
       
         Object.entries(meta_data[0]).forEach(([key, value]) => {
           demographics.append("h5").text(`${key}: ${value}`)});
-
-
-    // });
   
         // Create variables that will filter/map through our data set and pull the necessary info for our graphs
         var id_filter = data.samples.map(row => row.id);
@@ -110,20 +103,13 @@ function init() {
         var otu_labels = sample_data.map(row => row.otu_labels);
         var sample_values = sample_data.map(row => row.sample_values);
     
-        // Initialize x and y arrays 
-        // var x = [];
-        // var y = [];
-      
-        //  Create the Traces
+        //  Create the Traces for our horizontal bar graph
         var trace3 = {
           x: sample_values[0].slice(0,10).reverse(),
           y: otu_ids[0].slice(0,10).map(otuID => `OTU ${otuID}`).reverse(),
           text: otu_labels[0].slice(0,10).reverse(),
           type: "bar",
           orientation: 'h',
-          marker:{
-            width: 2
-          }
         };
 
         // Create the Traces for bubble chart
@@ -151,30 +137,5 @@ function init() {
       });
       
   };
-  
-  // --------------------- demographics info ---------------------
- 
-//   var dropdown_item = d3.select("#selDataset").on("change", demographic_info)
-
-//   function demographic_info() {
-    
-//     console.log(this.value);
-//     var demographics_id = this.value
-
-//     d3.json("samples.json").then((data) => {
-
-//         // console.log(demographics_id);
-//         var demographics = d3.select("#sample-metadata").select("h5");
-
-//         var meta_data = data.metadata.filter(row => row.id == demographics_id);
-//         console.log("metadata :", meta_data)
-        
-//         Object.entries(meta_data[0]).forEach(([key, value]) => {
-//           demographics.append("h5").text(`${key}: ${value}`)});
-
-//     });
-//  };
- 
-  // --------------------- demographics info ---------------------
   
   init(); 
